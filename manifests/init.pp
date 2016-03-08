@@ -31,6 +31,9 @@
 # [*hostallow*]
 #   Hosts to allow for portmap/rpcbind.
 #
+# [*pwdir*]
+#   Change the default location of PWDIR in the NIS Makefile
+#
 # === Examples
 #
 #  class { nis:
@@ -67,6 +70,7 @@ class nis (
    $groups     = undef,
    $securenets = undef,
    $hostallow  = undef,
+   $pwdir      = undef,
 ) {
    include nis::params
 
@@ -77,6 +81,12 @@ class nis (
    } else {
        $yps = [$ypserv]
    }
+
+   if ($pwdir) {
+        $root = "${pwdir}"
+    } else {
+        $root = 'etc'
+    }
 
    file { "/etc/yp.conf":
       ensure  => file,
@@ -114,7 +124,7 @@ class nis (
 
    if (!$groups) {
        augeas{ "add nis passwd default" :
-           context => "/files/etc/passwd",
+           context => "/files/${root}/passwd",
            changes => [
                'set @nisdefault/password x',
                'set @nisdefault/uid ""',
@@ -125,14 +135,14 @@ class nis (
            ],
        }
        augeas{ "remove nis groups" :
-           context => "/files/etc/passwd",
+           context => "/files/${root}/passwd",
            changes => [
                'rm @nis',
            ],
        }
    } else {
        augeas{ "remove nis passwd default" :
-           context => "/files/etc/passwd",
+           context => "/files/${root}/passwd",
            changes => [
                'rm @nisdefault',
            ],
@@ -141,7 +151,7 @@ class nis (
    }
 
    augeas{ "nis group default" :
-       context => "/files/etc/group",
+       context => "/files/${root}/group",
        changes => [
            'set @nisdefault/password ""',
            'set @nisdefault/gid ""',
@@ -158,6 +168,7 @@ class nis (
            master     => $master,
            securenets => $securenets,
            hostallow  => $hostallow,
+           pwdir      => $pwdir,
        }
    }
 

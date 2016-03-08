@@ -22,11 +22,18 @@ class nis::server (
       $nicknames = undef,
       $securenets = undef,
       $hostallow = undef,
+      $pwdir = undef,
     ) {
 
     include nis::client
     include nis::params
     include rpcbind
+
+    if ($pwdir) {
+	$root = "/files/${pwdir}/etc"
+    } else {
+	$root = '/files/etc'
+    }
 
     if ! defined(Package[$::nis::params::nis_srv_package]) {
       package { $::nis::params::nis_srv_package: ensure => latest }
@@ -90,7 +97,7 @@ class nis::server (
         }
 
         augeas{ "ypserv service" :
-          context => "/files/etc/services",
+          context => "/files/${root}/services",
           changes => [
               "ins service-name after service-name[last()]",
               "set service-name[last()] ypserv",
@@ -106,7 +113,7 @@ class nis::server (
         }
 
         augeas{ "ypxfrd service" :
-          context => "/files/etc/services",
+          context => "/files/${root}/services",
           changes => [
               "ins service-name after service-name[last()]",
               "set service-name[last()] ypxfrd",
