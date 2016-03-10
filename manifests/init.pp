@@ -84,7 +84,7 @@ class nis (
    $nsswitch_hosts_order  = $nis::params::hosts_order
 ) inherits nis::params {
 
-   if ($client == false && $server == false) {
+   if ($client == false and $server == false) {
      fail('You must indicate whether a client, server or both will be installed') 
    }
    validate_string($ypdomain)
