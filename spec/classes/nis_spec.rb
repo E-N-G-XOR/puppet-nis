@@ -28,7 +28,7 @@ describe 'nis' do
   end
 
   context 'server' do
-    let(:params) {{:server => true, :master => true, :ypdomain => 'MYDOMAIN', :client => false, :ypmaster => 'master', :ypserv => ['nis'], :nicknames => true, :securenets => true }}
+    let(:params) {{:server => true, :master => true, :ypdomain => 'MYDOMAIN', :client => false, :ypmaster => 'master', :ypserv => ['nis'], :nicknames => true, :securenets => true, :yppwddir => '/etc/nis', :nopush => 'false' }}
     let(:facts) {{:osfamily => 'Debian'}}
     it {should contain_class('nis::server::install')}
     it {should contain_class('nis::server::config')}
@@ -71,6 +71,9 @@ describe 'nis' do
       it { is_expected.to contain_package('nis') }
       it { is_expected.to contain_service('ypserv') }
       it { should contain_file('/etc/yp.conf').with_content(/domain MYDOMAIN server nis/) }
+      it { should contain_file('/var/yp/Makefile').with_content(/NOPUSH=false/) }
+      it { should contain_file('/var/yp/Makefile').with_content(/YPPWDDIR = \/etc\/nis/) }
+
     end
     context 'on RedHat' do
       let(:facts) {{:osfamily => 'RedHat'}}

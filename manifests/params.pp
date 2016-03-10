@@ -11,7 +11,7 @@ class nis::params {
   $securenets = undef
   $hostallow  = undef
   $yppwddir   = '/etc'
-  $nopush     = true
+  $nopush     = 'true'
   $client_service_enable = true
   $client_service_ensure = true
   $client_service_hasrestart = true

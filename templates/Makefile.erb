@@ -20,7 +20,7 @@ B=
 # slave servers (NOPUSH=true). If you have slave servers, change this
 # to "NOPUSH=false" and put all hostnames of your slave servers in the file
 # /var/yp/ypservers.
-NOPUSH=<% @nopush %>
+NOPUSH=<%= @nopush %>
 
 # Specify any additional arguments to be supplied when invoking yppush.
 # For example, the --port option may be used to allow operation with port
@@ -69,7 +69,7 @@ UMASK = umask 066
 # taken from YPSRCDIR.
 #
 YPSRCDIR = /etc
-YPPWDDIR = <% @yppwddir %>
+YPPWDDIR = <%= @yppwddir %>
 YPBINDIR = /usr/lib/yp
 YPSBINDIR = /usr/sbin
 YPDIR = /var/yp

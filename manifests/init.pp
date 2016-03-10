@@ -97,7 +97,7 @@ class nis (
    validate_bool($server)
    validate_bool($master)
    if ($yppwddir) { validate_string($yppwddir) }
-   validate_bool($nopush)
+   validate_string($nopush)
    validate_string($client_package)
    validate_string($client_service)
    validate_array($server_package)
