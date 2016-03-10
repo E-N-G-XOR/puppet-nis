@@ -28,7 +28,7 @@ class nis::params {
       $client_package = 'nis'
       $client_service = 'nis'
       $server_package = ['nis']
-      $server_service = 'nis'
+      $server_service = 'ypserv'
       $nis_pattern         = '/usr/sbin/ypbind'
       $securenets_file     = '/etc/ypserv.securenets'
       #$yp_config_command = "domainname $nis::ypdomain && ypinit -s $nis::ypmaster"
