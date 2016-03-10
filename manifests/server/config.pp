@@ -1,11 +1,11 @@
 define add_nis_host_allow($hn = $title, $process) {
     augeas { "nis-hosts-allow-${process}-${hn}":
-       context => '/files/etc/hosts.allow',
-       changes => [
-           "set 01/process ${process}",
-           "set 01/client[.='${hn}'] ${hn}",
-       ],
-       onlyif  => "match *[process='${process}'] size == 0"
+      context => '/files/etc/hosts.allow',
+      changes => [
+        "set 01/process ${process}",
+        "set 01/client[.='${hn}'] ${hn}",
+      ],
+      onlyif  => "match *[process='${process}'] size == 0"
     }
     augeas { "nis-hosts-allow-${process}-${hn}-client":
        context => '/files/etc/hosts.allow',
@@ -23,7 +23,7 @@ class nis::server::config inherits nis {
           augeas{ 'default nis master':
             context => '/files/etc/default/nis',
             changes => [
-              "set NISSERVER $server_mode",
+              "set NISSERVER ${server_mode}",
             ],
             require => Package[$nis::server_package],
           }
@@ -80,33 +80,16 @@ class nis::server::config inherits nis {
   if ($nis::yppwddir) {
     augeas{ 'default nis yppwddir':
       context => '/files/etc/default/nis',
-      changes => [
-        "set YPPWDDIR $nis::yppwddir",
-      ],
+      changes => ["set YPPWDDIR ${nis::yppwddir}"],
       require => Package[$nis::server_package],
     }
   }
 
-  if ($nis::yppwddir) {
-    augeas{ 'yp makefile yppwddir':
-      lens => "Simplevars.lns",
-      incl  => '/var/yp/Makefile',
-      changes => "set YPPWDDIR $nis::yppwddir"
-    }
-  }
-
-  if ($nis::nopush) {
-    augeas {'nopush Makefile':
-      lens   => "Simplevars.lns",
-      incl    => '/var/yp/Makefile',
-      changes => "set NOPUSH true",
-    }
-  } else {
-    augeas {'nopush Makefile':
-      lens   => 'Simplevars.lns',
-      incl    => '/var/yp/Makefile',
-      changes => "set NOPUSH false",
-    }
+  file {'/var/yp/Makefile':
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('nis/Makefile.erb')
   }
 
   if ($nis::nicknames) {
