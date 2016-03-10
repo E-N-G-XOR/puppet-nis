@@ -112,6 +112,7 @@ class nis (
    validate_string($server_package_ensure)
    validate_string($client_package_ensure)
 
+   # Unable to use variables in params.pp which are set in init.pp
    case $::osfamily {
      'Debian': {
        $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster"
