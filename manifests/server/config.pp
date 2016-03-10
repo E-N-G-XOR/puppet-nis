@@ -87,6 +87,16 @@ class nis::server::config inherits nis {
     }
   }
 
+  if ($nis::yppwddir) {
+    augeas{ 'yp makefile yppwddir':
+      context => '/files/var/yp/Makefile',
+      changes => [
+        "set YPPWDDIR $nis::yppwddir",
+      ],
+      require => Package[$nis::server_package],
+    }
+  }
+
   if ($nis::nopush) {
     augeas {'nopush Makefile':
       context => '/files/var/yp/Makefile',
