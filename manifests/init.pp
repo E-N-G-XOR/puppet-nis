@@ -61,7 +61,7 @@ class nis (
    $nicknames             = $nis::params::nicknames,
    $securenets            = $nis::params::securenets,
    $hostallow             = $nis::params::hostallow,
-   $yppwdir               = $nis::params::yppwdir,
+   $yppwddir              = $nis::params::yppwddir,
    $nopush                = $nis::params::nopush,
    $client_package        = $nis::params::client_package,
    $client_service        = $nis::params::client_service,
