@@ -45,5 +45,14 @@ class nis::client::config inherits nis {
      source => 'puppet:///modules/nis/nsswitch.conf',
    }
 
+   augeas{ "nis group default" :
+       context => "/files/etc/group",
+       changes => [
+           'set @nisdefault/password ""',
+           'set @nisdefault/gid ""',
+       ],
+   }
+
+
 
 }

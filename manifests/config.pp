@@ -18,14 +18,6 @@ class nis::config inherits nis {
      }
    }
 
-   augeas{ "nis group default" :
-       context => "/files/etc/group",
-       changes => [
-           'set @nisdefault/password ""',
-           'set @nisdefault/gid ""',
-       ],
-   }
-
    file { "/etc/yp.conf":
      ensure  => file,
      owner   => "root",
