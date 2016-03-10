@@ -69,7 +69,7 @@ describe 'nis' do
       let(:facts) {{:osfamily => 'Debian'}}
       it { should contain_file('/etc/defaultdomain')}
       it { is_expected.to contain_package('nis') }
-      it { is_expected.to contain_service('nis') }
+      it { is_expected.to contain_service('ypserv') }
       it { should contain_file('/etc/yp.conf').with_content(/domain MYDOMAIN server nis/) }
     end
     context 'on RedHat' do
