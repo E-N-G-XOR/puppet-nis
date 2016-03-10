@@ -19,7 +19,13 @@
 #       none of them is rechable, try a broadcast call to
 #       find a server.
 #
-<% @yps.sort.each do |serv|-%>
-domain <%= ypdomain %> server <%= serv %>
+<% if @server == true %>
+<% @ypserv.sort.each do |serv|-%>
+domain <%= @ypdomain %> server <%= serv %>
 <% end -%>
-ypserver <%= ypserv %>
+<% end -%>
+<% if @client == true %>
+<% @ypserv.sort.each do |serv|-%>
+ypserver <%= serv %>
+<% end -%>
+<% end -%>

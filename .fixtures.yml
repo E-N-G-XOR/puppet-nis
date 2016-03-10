@@ -1,0 +1,7 @@
+fixtures:
+  repositories:
+    'rpcbind' : 'https://github.com/desalvo/puppet-rpcbind.git'
+    'stdlib'  : 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+  symlinks:
+    "nis": "#{source_dir}"
+

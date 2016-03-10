@@ -30,12 +30,12 @@
 #shadow:    db files nisplus nis
 #group:     db files nisplus nis
 
-passwd:     <%= nsswitch_passwd_order %>
-shadow:     <%= nsswitch_shadow_order %>
-group:      <%= nsswitch_group_order %>
+passwd:     <%= @nsswitch_passwd_order %>
+shadow:     <%= @nsswitch_shadow_order %>
+group:      <%= @nsswitch_group_order %>
 
 #hosts:     db files nisplus nis dns
-hosts:      files nis dns
+hosts:      <%= @nsswitch_hosts_order %>
 
 # Example - obey only what nisplus tells us...
 #services:   nisplus [NOTFOUND=return] files

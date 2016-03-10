@@ -50,126 +50,82 @@
 #
 # Copyright 2013 Your name here, unless otherwise noted.
 #
-
-define nis::enable_nis_groups {
-    augeas{ "${title} nis group enable" :
-        context => "/files/etc/passwd",
-        changes => [
-            "set @nis ${title}",
-        ],
-    }
-}
-
 class nis (
-   $ypdomain,
-   $ypserv     = undef,
-   $ypmaster   = undef,
-   $client     = true,
-   $server     = false,
-   $master     = true,
-   $groups     = undef,
-   $securenets = undef,
-   $hostallow  = undef,
-   $pwdir      = undef,
-) {
-   include nis::params
+   $ypdomain              = $nis::params::ypdomain,
+   $ypserv                = $nis::params::ypserv,
+   $ypmaster              = $nis::params::ypmaster,
+   $client                = $nis::params::client,
+   $server                = $nis::params::server,
+   $master                = $nis::params::master,
+   $groups                = $nis::params::groups,
+   $nicknames             = $nis::params::nicknames,
+   $securenets            = $nis::params::securenets,
+   $hostallow             = $nis::params::hostallow,
+   $pwdir                 = $nis::params::pwdir,
+   $client_package        = $nis::params::client_package,
+   $client_service        = $nis::params::client_service,
+   $server_package        = $nis::params::server_package,
+   $server_service        = $nis::params::server_service,
+   $client_service_enable = $nis::params::client_service_enable,
+   $server_service_enable = $nis::params::server_service_enable,
+   $client_service_ensure = $nis::params::client_service_ensure,
+   $server_service_ensure = $nis::params::server_service_ensure,
+   $client_service_hasrestart = $nis::params::client_service_hasrestart,
+   $server_service_hasrestart = $nis::params::server_service_hasrestart,
+   $server_package_ensure = $nis::params::server_package_ensure,
+   $client_package_ensure = $nis::params::client_package_ensure,
+   $yp_config_command     = $nis::params::yp_config_command,
+   $exec_path             = $nis::params::exec_path,
+   $securenets_file       = $nis::params::securenets_file,
+   $nis_pattern           = $nis::params::nis_pattern,
+   $nsswitch_passwd_order = $nis::params::passwd_order,
+   $nsswitch_shadow_order = $nis::params::shadow_order,
+   $nsswitch_group_order  = $nis::params::group_order,
+   $nsswitch_hosts_order  = $nis::params::hosts_order
+) inherits nis::params {
 
-   package { $::nis::params::nis_package: ensure => latest }
-
-   if ($ypserv and is_array($ypserv)) {
-       $yps = $ypserv
-   } else {
-       $yps = [$ypserv]
-   }
-
-   if ($pwdir) {
-        $root = "${pwdir}"
-    } else {
-        $root = 'etc'
-    }
-
-   file { "/etc/yp.conf":
-      ensure  => file,
-      owner   => "root",
-      group   => "root",
-      mode    => 0644,
-      content => template("nis/yp.conf.erb"),
-      require => Package[$::nis::params::nis_package]
-   }
-
-   file { "/etc/nsswitch.conf":
-      ensure  => file,
-      owner   => "root",
-      group   => "root",
-      mode    => 0644,
-      source  => "puppet:///modules/nis/nsswitch.conf",
-   }
-
-   case $::osfamily {
-     'Debian': {
-       file { '/etc/defaultdomain':
-         content => "$ypdomain\n",
-       }
-     }
-     'RedHat': {
-       augeas{ "nis domain network" :
-         context => "/files/etc/sysconfig/network",
-         changes => [
-           "set NISDOMAIN ${ypdomain}",
-           "set DOMAIN ${ypdomain}",
-         ],
-       }
-     }
-   }
-
-   if (!$groups) {
-       augeas{ "add nis passwd default" :
-           context => "/files/${root}/passwd",
-           changes => [
-               'set @nisdefault/password x',
-               'set @nisdefault/uid ""',
-               'set @nisdefault/gid ""',
-               'clear @nisdefault/name',
-               'clear @nisdefault/home',
-               'set @nisdefault/shell /sbin/nologin',
-           ],
-       }
-       augeas{ "remove nis groups" :
-           context => "/files/${root}/passwd",
-           changes => [
-               'rm @nis',
-           ],
-       }
-   } else {
-       augeas{ "remove nis passwd default" :
-           context => "/files/${root}/passwd",
-           changes => [
-               'rm @nisdefault',
-           ],
-       }
-       nis::enable_nis_groups { $groups: }
-   }
-
-   augeas{ "nis group default" :
-       context => "/files/${root}/group",
-       changes => [
-           'set @nisdefault/password ""',
-           'set @nisdefault/gid ""',
-       ],
-   }
+   validate_string($ypdomain)
+   validate_string($ypmaster)
+   if ($ypserv) { validate_array($ypserv) }
+   if ($client) { validate_array($ypserv) }
+   if ($client) { validate_string($ypmaster) }
+   if ($server) { validate_bool($master) }
+   validate_bool($client)
+   validate_bool($server)
+   validate_bool($master)
+   if ($pwdir) { validate_string($pwdir) }
+   validate_string($client_package)
+   validate_string($client_service)
+   validate_array($server_package)
+   validate_string($server_service)
+   validate_bool($client_service_enable)
+   validate_bool($server_service_enable)
+   validate_array($exec_path)
+   validate_bool($client_service_enable)
+   validate_bool($client_service_ensure)
+   validate_bool($client_service_hasrestart)
+   validate_bool($server_service_enable)
+   validate_bool($server_service_ensure)
+   validate_bool($server_service_hasrestart)
+   validate_string($server_package_ensure)
+   validate_string($client_package_ensure)
 
    if ($client) {
-       class { 'nis::client': }
+     anchor{'nis::begin':}->
+     class{'::nis::client::install':}->
+     class{'::nis::config':}~>
+     class{'::nis::client::config':}~>
+     class{'::nis::client::service':}->
+     anchor{'nis::end':}
    }
+
    if ($server) {
-       class { 'nis::server':
-           ypdomain   => $ypdomain,
-           ypmaster   => $ypmaster,
-           master     => $master,
-           securenets => $securenets,
-           hostallow  => $hostallow,
-           pwdir      => $pwdir,
-       }
+     anchor{'nis::begin':}->
+     class{'::nis::server::install':}->
+     class{'::nis::config':}~>
+     class{'::nis::server::config':}~>
+     class{'::nis::server::service':}->
+     anchor{'nis::end':}
    }
 
 }
