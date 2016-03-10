@@ -115,10 +115,18 @@ class nis (
    # Unable to use variables in params.pp which are set in init.pp
    case $::osfamily {
      'Debian': {
-       $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster"
+       if ($master) {
+         $yp_config_command = "domainname $ypdomain && ypinit -m"
+       } else {
+         $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster"
+       }
      }
      'RedHat': {
-       $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster && authconfig --enablenis --enablekrb5 --kickstart"
+       if ($master) {
+         $yp_config_command = "domainname $ypdomain && ypinit -m && authconfig --enablenis --enablekrb5 --kickstart"
+       } else {
+         $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster && authconfig --enablenis --enablekrb5 --kickstart"
+       }
      }
    }
 
