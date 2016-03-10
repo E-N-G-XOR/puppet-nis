@@ -89,33 +89,23 @@ class nis::server::config inherits nis {
 
   if ($nis::yppwddir) {
     augeas{ 'yp makefile yppwddir':
-      context => '/files/var/yp/Makefile',
-      lens => 'Puppet.lns',
+      lens => "Simplevars.lns",
       incl  => '/var/yp/Makefile',
-      changes => [
-        "set YPPWDDIR $nis::yppwddir",
-      ],
-      require => Package[$nis::server_package],
+      changes => "set YPPWDDIR $nis::yppwddir"
     }
   }
 
   if ($nis::nopush) {
     augeas {'nopush Makefile':
-      context => '/files/var/yp/Makefile',
-      lens   => 'Puppet.lns',
+      lens   => "Simplevars.lns",
       incl    => '/var/yp/Makefile',
-      changes => [
-        "set NOPUSH true"
-      ],
+      changes => "set NOPUSH true",
     }
   } else {
     augeas {'nopush Makefile':
-      context => '/files/var/yp/Makefile',
-      lens   => 'Puppet.lns',
+      lens   => 'Simplevars.lns',
       incl    => '/var/yp/Makefile',
-      changes => [
-        "set NOPUSH false"
-      ],
+      changes => "set NOPUSH false",
     }
   }
 
