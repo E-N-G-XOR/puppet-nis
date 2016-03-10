@@ -123,7 +123,7 @@ class nis::server::config inherits nis {
 
   exec {'yp-config':
     command => $nis::yp_config_command,
-    path    => $exec_path,
+    path    => $nis::exec_path,
     unless  => "test -d /var/yp/${nis::ypdomain}",
     require => Package[$nis::server_package],
     notify  => Service[$nis::server_service],

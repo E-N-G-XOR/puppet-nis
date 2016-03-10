@@ -36,7 +36,7 @@ describe 'nis' do
     it do
       should contain_exec('yp-config').with(
         :command => 'domainname MYDOMAIN && ypinit -s master',
-        :path    => [ '/bin', '/usr/bin', '/usr/lib64/yp', '/usr/lib/yp', '/usr/sbin' ],
+        :path    => ['/bin','/usr/bin','/usr/lib64/yp','/usr/lib/yp','/usr/sbin' ],
         :unless  => 'test -d /var/yp/MYDOMAIN'
       )
     end
