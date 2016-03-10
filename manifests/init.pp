@@ -85,7 +85,8 @@ class nis (
 ) inherits nis::params {
 
    if ($client == false && $server == false) {
-     fail("You must indicate whether a client, server or both will be installed") }
+     fail('You must indicate whether a client, server or both will be installed') 
+   }
    validate_string($ypdomain)
    validate_string($ypmaster)
    if ($ypserv) { validate_array($ypserv) }
