@@ -35,7 +35,7 @@ describe 'nis' do
     it {should contain_class('nis::server::service')}
     it do
       should contain_exec('yp-config').with(
-        :command => 'domainname MYDOMAIN && ypinit -s master',
+        :command => 'domainname MYDOMAIN && ypinit -m',
         :path    => ['/bin','/usr/bin','/usr/lib64/yp','/usr/lib/yp','/usr/sbin' ],
         :unless  => 'test -d /var/yp/MYDOMAIN'
       )

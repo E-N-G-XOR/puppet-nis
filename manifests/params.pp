@@ -10,7 +10,8 @@ class nis::params {
   $nicknames  = undef
   $securenets = undef
   $hostallow  = undef
-  $pwdir      = false
+  $yppwddir      = false
+  $nopush     = true
   $client_service_enable = true
   $client_service_ensure = true
   $client_service_hasrestart = true

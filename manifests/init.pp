@@ -61,7 +61,7 @@ class nis (
    $nicknames             = $nis::params::nicknames,
    $securenets            = $nis::params::securenets,
    $hostallow             = $nis::params::hostallow,
-   $yppwdir               = $nis::params::pwdir,
+   $yppwdir               = $nis::params::yppwdir,
    $nopush                = $nis::params::nopush,
    $client_package        = $nis::params::client_package,
    $client_service        = $nis::params::client_service,
@@ -96,7 +96,8 @@ class nis (
    validate_bool($client)
    validate_bool($server)
    validate_bool($master)
-   if ($pwdir) { validate_string($pwdir) }
+   if ($yppwddir) { validate_string($yppwddir) }
+   validate_bool($nopush)
    validate_string($client_package)
    validate_string($client_service)
    validate_array($server_package)
