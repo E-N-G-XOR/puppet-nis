@@ -87,31 +87,37 @@ class nis::server::config inherits nis {
     }
   }
 
-#  if ($nis::yppwddir) {
-#    augeas{ 'yp makefile yppwddir':
-#      context => '/files/var/yp/Makefile',
-#      changes => [
-#        "set YPPWDDIR $nis::yppwddir",
-#      ],
-#      require => Package[$nis::server_package],
-#    }
-#  }
-#
-#  if ($nis::nopush) {
-#    augeas {'nopush Makefile':
-#      context => '/files/var/yp/Makefile',
-#      changes => [
-#        "set NOPUSH true"
-#      ],
-#    }
-#  } else {
-#    augeas {'nopush Makefile':
-#      context => '/files/var/yp/Makefile',
-#      changes => [
-#        "set NOPUSH false"
-#      ],
-#    }
-#  }
+  if ($nis::yppwddir) {
+    augeas{ 'yp makefile yppwddir':
+      context => '/files/var/yp/Makefile',
+      lense => 'Puppet.lns',
+      incl  => '/var/yp/Makefile',
+      changes => [
+        "set YPPWDDIR $nis::yppwddir",
+      ],
+      require => Package[$nis::server_package],
+    }
+  }
+
+  if ($nis::nopush) {
+    augeas {'nopush Makefile':
+      context => '/files/var/yp/Makefile',
+      lense   => 'Puppet.lns',
+      incl    => '/var/yp/Makefile',
+      changes => [
+        "set NOPUSH true"
+      ],
+    }
+  } else {
+    augeas {'nopush Makefile':
+      context => '/files/var/yp/Makefile',
+      lense   => 'Puppet.lns',
+      incl    => '/var/yp/Makefile',
+      changes => [
+        "set NOPUSH false"
+      ],
+    }
+  }
 
   if ($nis::nicknames) {
     file { '/var/yp/nicknames':
