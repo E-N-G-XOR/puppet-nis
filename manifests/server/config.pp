@@ -23,7 +23,7 @@ class nis::server::config inherits nis {
           augeas{ 'default nis master':
             context => '/files/etc/default/nis',
             changes => [
-              'set NISSERVER $server_mode',
+              "set NISSERVER $server_mode",
             ],
             require => Package[$nis::server_package],
           }
@@ -80,19 +80,25 @@ class nis::server::config inherits nis {
   if ($nis::yppwddir) {
     augeas {'yppwdir Makefile':
       context => '/files/var/yp/Makefile',
-      changes => "set YPPWDDIR $nis::yppwddir"
+      changes => [
+        "set YPPWDDIR $nis::yppwddir"
+      ],
     }
   }
 
   if ($nis::nopush) {
     augeas {'nopush Makefile':
       context => '/files/var/yp/Makefile',
-      changes => "set NOPUSH true"
+      changes => [
+        "set NOPUSH true"
+      ],
     }
   } else {
     augeas {'nopush Makefile':
       context => '/files/var/yp/Makefile',
-      changes => "set NOPUSH false"
+      changes => [
+        "set NOPUSH false"
+      ],
     }
   }
 
@@ -129,8 +135,8 @@ class nis::server::config inherits nis {
       'set hosts/map hosts.byname',
       'set netgroup/map netgroup',
     ],
-    require => Package[$nis::params::nis_srv_package],
-    notify  => Service[$nis::params::nis_srv_service],
+    require => Package[$nis::server_package],
+    notify  => Service[$nis::server_service],
   }
 
   exec {'yp-config':
