@@ -74,7 +74,6 @@ class nis (
    $server_service_hasrestart = $nis::params::server_service_hasrestart,
    $server_package_ensure = $nis::params::server_package_ensure,
    $client_package_ensure = $nis::params::client_package_ensure,
-   $yp_config_command     = $nis::params::yp_config_command,
    $exec_path             = $nis::params::exec_path,
    $securenets_file       = $nis::params::securenets_file,
    $nis_pattern           = $nis::params::nis_pattern,
@@ -112,6 +111,15 @@ class nis (
    validate_bool($server_service_hasrestart)
    validate_string($server_package_ensure)
    validate_string($client_package_ensure)
+
+   case $::osfamily {
+     'Debian': {
+       $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster"
+     }
+     'RedHat': {
+       $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster && authconfig --enablenis --enablekrb5 --kickstart"
+     }
+   }
 
    if ($client) {
      anchor{'nis::begin':}->

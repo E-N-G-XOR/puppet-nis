@@ -30,7 +30,7 @@ class nis::params {
       $server_service = 'nis'
       $nis_pattern         = '/usr/sbin/ypbind'
       $securenets_file     = '/etc/ypserv.securenets'
-      $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster"
+      #$yp_config_command = "domainname $nis::ypdomain && ypinit -s $nis::ypmaster"
     }
     'RedHat': {
       $client_package = 'ypbind'
@@ -39,7 +39,7 @@ class nis::params {
       $server_service = 'ypserv'
       $nis_pattern = 'ypbind'
       $securenets_file = '/var/yp/securenets'
-      $yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster && authconfig --enablenis --enablekrb5 --kickstart"
+      #$yp_config_command = "domainname $ypdomain && ypinit -s $ypmaster && authconfig --enablenis --enablekrb5 --kickstart"
     }
     default: {fail("NIS class does not work on osfamily: ${::osfamily}")}
   }

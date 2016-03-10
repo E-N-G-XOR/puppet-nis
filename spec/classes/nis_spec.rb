@@ -28,11 +28,19 @@ describe 'nis' do
   end
 
   context 'server' do
-    let(:params) {{:server => true, :master => true, :ypdomain => 'MYDOMAIN', :client => false, :ypserv => ['nis'], :nicknames => true, :securenets => true }}
+    let(:params) {{:server => true, :master => true, :ypdomain => 'MYDOMAIN', :client => false, :ypmaster => 'master', :ypserv => ['nis'], :nicknames => true, :securenets => true }}
     let(:facts) {{:osfamily => 'Debian'}}
     it {should contain_class('nis::server::install')}
     it {should contain_class('nis::server::config')}
     it {should contain_class('nis::server::service')}
+    it do
+      should contain_exec('yp-config').with(
+        :command => 'domainname MYDOMAIN && ypinit -s master',
+        :path    => [ '/bin', '/usr/bin', '/usr/lib64/yp', '/usr/lib/yp', '/usr/sbin' ],
+        :unless  => 'test -d /var/yp/MYDOMAIN'
+      )
+    end
+
 
     context 'with nicknames => true' do 
       let(:facts) {{:osfamily => 'Debian'}}
