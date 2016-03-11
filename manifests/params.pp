@@ -27,7 +27,7 @@ class nis::params {
   case $::osfamily {
     'Debian': {
       $client_package = 'nis'
-      $client_service = 'nis'
+      $client_service = 'ypbind'
       $server_package = ['nis']
       $server_service = 'ypserv'
       $nis_pattern         = '/usr/sbin/ypbind'
