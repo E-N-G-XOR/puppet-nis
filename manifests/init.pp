@@ -114,6 +114,11 @@ class nis (
    validate_string($server_package_ensure)
    validate_string($client_package_ensure)
 
+   if ($server == false) {
+     if ($yppwddir) { fail("YPPWDDIR is a server parameter") }
+     if ($nopush) { fail("NOPUSH is a server parameter") }
+   }
+
    # Unable to use variables in params.pp which are set in init.pp
    case $::osfamily {
      'Debian': {
