@@ -63,6 +63,7 @@ class nis (
    $hostallow             = $nis::params::hostallow,
    $yppwddir              = $nis::params::yppwddir,
    $nopush                = $nis::params::nopush,
+   $all                   = $nis::params::all,
    $client_package        = $nis::params::client_package,
    $client_service        = $nis::params::client_service,
    $server_package        = $nis::params::server_package,
@@ -113,6 +114,7 @@ class nis (
    validate_bool($server_service_hasrestart)
    validate_string($server_package_ensure)
    validate_string($client_package_ensure)
+   validate_string($all)
 
    # Unable to use variables in params.pp which are set in init.pp
    case $::osfamily {

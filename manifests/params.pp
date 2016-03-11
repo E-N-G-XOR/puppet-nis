@@ -12,6 +12,7 @@ class nis::params {
   $hostallow  = undef
   $yppwddir   = '/etc'
   $nopush     = 'true'
+  $all        = 'passwd group hosts rpc services netid protocols netgrp'
   $client_service_enable = true
   $client_service_ensure = true
   $client_service_hasrestart = true
