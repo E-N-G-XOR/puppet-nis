@@ -10,9 +10,9 @@ class nis::params {
   $nicknames  = undef
   $securenets = undef
   $hostallow  = undef
-  $yppwddir   = '/etc'
-  $nopush     = 'true'
-  $all        = 'passwd group hosts rpc services netid protocols netgrp'
+  $makefile_yppwddir   = '/etc'
+  $makefile_nopush     = 'true'
+  $makefile_all        = 'passwd group hosts rpc services netid protocols netgrp'
   $client_service_enable = true
   $client_service_ensure = true
   $client_service_hasrestart = true

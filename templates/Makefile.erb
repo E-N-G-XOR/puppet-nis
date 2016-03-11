@@ -20,7 +20,7 @@ B=
 # slave servers (NOPUSH=true). If you have slave servers, change this
 # to "NOPUSH=false" and put all hostnames of your slave servers in the file
 # /var/yp/ypservers.
-NOPUSH=<%= @nopush %>
+NOPUSH=<%= @makefile_nopush %>
 
 # Specify any additional arguments to be supplied when invoking yppush.
 # For example, the --port option may be used to allow operation with port
@@ -69,7 +69,7 @@ UMASK = umask 066
 # taken from YPSRCDIR.
 #
 YPSRCDIR = /etc
-YPPWDDIR = <%= @yppwddir %>
+YPPWDDIR = <%= @makefile_yppwddir %>
 YPBINDIR = /usr/lib/yp
 YPSBINDIR = /usr/sbin
 YPDIR = /var/yp
@@ -116,7 +116,7 @@ target: Makefile
 # If you don't want some of these maps built, feel free to comment
 # them out from this list.
 
-ALL =	<%= @all %>
+ALL =	<%= @makefile_all %>
 #ALL +=	publickey mail ethers bootparams printcap
 #ALL +=	amd.home auto.master auto.home auto.local
 #ALL +=	timezone locale networks netmasks
