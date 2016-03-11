@@ -27,6 +27,16 @@ class nis::server::config inherits nis {
             ],
             require => Package[$nis::server_package],
           }
+
+         if ($nis::client == false) {
+          augeas{ 'default nis client':
+            context => '/files/etc/default/nis',
+            changes => [
+              "set NISCLIENT false",
+            ],
+            require => Package[$nis::server_package],
+          }
+        }
       }
       'RedHat': {
         if ($nis::hostallow) {
