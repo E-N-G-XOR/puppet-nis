@@ -28,7 +28,7 @@ describe 'nis' do
   end
 
   context 'server' do
-    let(:params) {{:server => true, :master => true, :ypdomain => 'MYDOMAIN', :client => false, :ypmaster => 'master', :ypserv => ['nis'], :nicknames => true, :securenets => true, :yppwddir => '/etc/nis', :nopush => 'false' }}
+    let(:params) {{:server => true, :master => true, :ypdomain => 'MYDOMAIN', :client => false, :ypmaster => 'master', :ypserv => ['nis'], :nicknames => true, :securenets => true, :makefile_yppwddir => '/etc/nis', :makefile_nopush => 'false' }}
     let(:facts) {{:osfamily => 'Debian'}}
     it {should contain_class('nis::server::install')}
     it {should contain_class('nis::server::config')}
