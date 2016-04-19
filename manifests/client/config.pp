@@ -53,6 +53,10 @@ class nis::client::config inherits nis {
        ],
    }
 
+   service{"$nis::client_service":
+     ensure => running,
+   }
+
 
 
 }

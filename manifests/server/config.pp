@@ -100,6 +100,7 @@ class nis::server::config inherits nis {
     group   => root,
     mode    => '0644',
     content => template('nis/Makefile.erb')
+    notify  => Service[$nis::server_service],
   }
 
   if ($nis::nicknames) {
@@ -145,6 +146,10 @@ class nis::server::config inherits nis {
     unless  => "test -d /var/yp/${nis::ypdomain}",
     require => Package[$nis::server_package],
     notify  => Service[$nis::server_service],
+  }
+
+  service {$nis::server_service:
+    ensure => running,
   }
 
 }
