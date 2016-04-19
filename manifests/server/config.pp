@@ -82,7 +82,7 @@ class nis::server::config inherits nis {
               "set YPXFRD_ARGS '\"-p 835\"'",
           ],
           require => Package[$nis::server_package],
-          notify  => Service[$nis::server_service],
+          notify  => Service['ypbind'],
         }
       }
     }
@@ -99,8 +99,8 @@ class nis::server::config inherits nis {
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('nis/Makefile.erb')
-    notify  => Service[$nis::server_service],
+    content => template('nis/Makefile.erb'),
+    notify  => Service['ypbind'],
   }
 
   if ($nis::nicknames) {
@@ -111,7 +111,7 @@ class nis::server::config inherits nis {
       mode    => '0644',
       source  => $nis::nicknames,
       require => Package[$nis::server_package],
-      notify  => Service[$nis::server_service],
+      notify  => Service['ypbind'],
     }
 
   }
@@ -124,7 +124,7 @@ class nis::server::config inherits nis {
       mode    => '0644',
       source  => $nis::securenets,
       require => Package[$nis::server_package],
-      notify  => Service[$nis::server_service],
+      notify  => Service['ypbind'],
     }
   }
 
@@ -137,7 +137,7 @@ class nis::server::config inherits nis {
       'set netgroup/map netgroup',
     ],
     require => Package[$nis::server_package],
-    notify  => Service[$nis::server_service],
+    notify  => Service['ypbind'],
   }
 
   exec {'yp-config':
@@ -145,7 +145,7 @@ class nis::server::config inherits nis {
     path    => $nis::exec_path,
     unless  => "test -d /var/yp/${nis::ypdomain}",
     require => Package[$nis::server_package],
-    notify  => Service[$nis::server_service],
+    notify  => Service['ypbind'],
   }
 
 }
