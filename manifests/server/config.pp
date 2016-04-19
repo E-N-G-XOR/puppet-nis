@@ -148,8 +148,4 @@ class nis::server::config inherits nis {
     notify  => Service[$nis::server_service],
   }
 
-  service {$nis::server_service:
-    ensure => running,
-  }
-
 }
