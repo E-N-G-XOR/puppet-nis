@@ -24,7 +24,6 @@ class nis::config inherits nis {
      group   => "root",
      mode    => "0644",
      content => template("nis/yp.conf.erb"),
-     require => Package[$nis::nis_package]
    }
 
 }
