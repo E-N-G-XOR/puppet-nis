@@ -8,9 +8,9 @@ define add_nis_host_allow($hn = $title, $process) {
       onlyif  => "match *[process='${process}'] size == 0"
     }
     augeas { "nis-hosts-allow-${process}-${hn}-client":
-       context => '/files/etc/hosts.allow',
-       changes => "set *[process='${process}']/client[.='${hn}'] ${hn}",
-       require => Augeas["nis-hosts-allow-${process}-${hn}"],
+      context => '/files/etc/hosts.allow',
+      changes => "set *[process='${process}']/client[.='${hn}'] ${hn}",
+      require => Augeas["nis-hosts-allow-${process}-${hn}"],
     }
 }
 
@@ -20,21 +20,21 @@ class nis::server::config inherits nis {
 
     case $::osfamily {
       'Debian': {
-          augeas{ 'default nis master':
-            context => '/files/etc/default/nis',
-            changes => [
-              "set NISSERVER ${server_mode}",
-            ],
-            require => Package[$nis::server_package],
-          }
+         augeas{ 'default nis master':
+           context => '/files/etc/default/nis',
+           changes => [
+             "set NISSERVER ${server_mode}",
+           ],
+           require => Package[$nis::server_package],
+         }
 
          if ($nis::client == false) {
-          augeas{ 'default nis client':
-            context => '/files/etc/default/nis',
-            changes => [
-              "set NISCLIENT false",
-            ],
-            require => Package[$nis::server_package],
+           augeas{ 'default nis client':
+             context => '/files/etc/default/nis',
+             changes => [
+               "set NISCLIENT false",
+             ],
+             require => Package[$nis::server_package],
           }
         }
       }
