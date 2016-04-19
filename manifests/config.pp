@@ -25,9 +25,4 @@ class nis::config inherits nis {
      mode    => "0644",
      content => template("nis/yp.conf.erb"),
    }
-
-   service {"ypbind":
-      ensure => running
-   }
-
 }
