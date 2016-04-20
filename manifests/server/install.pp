@@ -10,8 +10,6 @@ class nis::server::install inherits nis {
      enable     => $nis::client_service_enable,
      hasrestart => $nis::client_service_hasrestart,
      pattern    => $nis::nis_pattern,
-     subscribe  => [File["/etc/yp.conf"]],
-     require    => [File["/etc/yp.conf"]],
   }
 
 
